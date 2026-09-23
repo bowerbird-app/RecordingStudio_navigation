@@ -243,10 +243,10 @@ class NavigationRouteTest < Minitest::Test
     RecordingStudio::Navigation.register(key: key, label: "Brands", route: route)
   end
 
-  def with_mounted_routes(routes, &block)
+  def with_mounted_routes(routes, &)
     route_set = Struct.new(:routes).new(routes)
     application = Struct.new(:routes).new(route_set)
 
-    ::Rails.stub(:application, application, &block)
+    ::Rails.stub(:application, application, &)
   end
 end

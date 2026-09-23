@@ -173,7 +173,8 @@ class InstallGeneratorTest < Minitest::Test
   def tailwind_source_lines
     [
       '@source "../../vendor/bundle/**/recording_studio_navigation/app/views/**/*.erb";',
-      '@source "../../../../../../usr/local/bundle/ruby/**/bundler/gems/recording_studio_navigation-*/app/views/**/*.erb";',
+      "@source \"../../../../../../usr/local/bundle/ruby/**/bundler/gems/" \
+      "recording_studio_navigation-*/app/views/**/*.erb\";",
       '@source "../../vendor/bundle/**/flatpack/app/components/**/*.{rb,erb}";',
       '@source "../../../../../../usr/local/bundle/ruby/**/bundler/gems/flatpack-*/app/components/**/*.{rb,erb}";'
     ]

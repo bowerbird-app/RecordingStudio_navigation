@@ -51,7 +51,8 @@ module RecordingStudioNavigation
       end
     end
 
-    initializer "recording_studio_navigation.before_initialize", before: "recording_studio_navigation.load_config" do |_app|
+    initializer "recording_studio_navigation.before_initialize",
+                before: "recording_studio_navigation.load_config" do |_app|
       RecordingStudioNavigation.configuration.hooks.run(:before_initialize, self)
     end
 
@@ -59,8 +60,8 @@ module RecordingStudioNavigation
       if app.respond_to?(:config_for)
         begin
           yaml = app.config_for(:recording_studio_navigation)
-        rescue RuntimeError => error
-          raise unless error.message.start_with?("Could not load configuration. No such file")
+        rescue RuntimeError => e
+          raise unless e.message.start_with?("Could not load configuration. No such file")
 
           yaml = nil
         end
@@ -75,7 +76,8 @@ module RecordingStudioNavigation
       RecordingStudioNavigation.configuration.hooks.run(:on_configuration, RecordingStudioNavigation.configuration)
     end
 
-    initializer "recording_studio_navigation.after_initialize", after: "recording_studio_navigation.load_config" do |_app|
+    initializer "recording_studio_navigation.after_initialize",
+                after: "recording_studio_navigation.load_config" do |_app|
       RecordingStudioNavigation.configuration.hooks.run(:after_initialize, self)
     end
 
