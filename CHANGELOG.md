@@ -7,6 +7,8 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-23
+
 ### Added
 - `RecordingStudio::Navigation`, a process-wide registry of navigable destinations. Gems call `register(key:, label:, route:, ...)`; hosts read `destinations(tag:, sensitivity:)`, `group(name)`, and `search(query, ...)`. Destinations are frozen, keys are globally unique, and a conflicting re-registration raises `DuplicateDestinationError` naming both declaration sites.
 - Request-time route resolution for host helpers (through `main_app`), mounted engine helpers (found in the host's route set, so the mount prefix is always current), and callables. `Route#resolve` is the only method that builds a path.
@@ -16,6 +18,10 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Gem renamed from `gem_template` to `recording_studio_navigation` (engine module `RecordingStudioNavigation`). The public API namespace is `RecordingStudio::Navigation`.
 - README replaced the template guide's "what this gem is" with the navigation registry: registration, querying, groups, sensitivity, and host filtering.
+- Dummy Tailwind sources scan FlatPack and Recording Studio git checkouts under `vendor/bundle`, `/usr/local/lib/ruby/gems`, and the GitHub Actions toolcache, so component classes and the default layout are compiled wherever Bundler installed them.
+
+### Removed
+- Unused `recording_studio_navigation_pages` migration. Destinations live in the in-memory registry, not a table.
 
 ## [0.2.2] - 2026-09-11
 
@@ -100,7 +106,8 @@ New addons copied from this template are born on Recording Studio 4.x.
 - Comprehensive README and documentation
 - Basic test suite with Minitest
 
-[Unreleased]: https://github.com/bowerbird-app/recording_studio_navigation/compare/v0.2.2...HEAD
+[Unreleased]: https://github.com/bowerbird-app/recording_studio_navigation/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/bowerbird-app/recording_studio_navigation/compare/v0.2.2...v0.3.0
 [0.2.2]: https://github.com/bowerbird-app/recording_studio_navigation/releases/tag/v0.2.2
 [0.2.1]: https://github.com/bowerbird-app/recording_studio_navigation/releases/tag/v0.2.1
 [0.2.0]: https://github.com/bowerbird-app/recording_studio_navigation/releases/tag/v0.2.0
