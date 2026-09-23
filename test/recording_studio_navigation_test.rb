@@ -121,6 +121,19 @@ class RecordingStudioNavigationTest < Minitest::Test
     refute_includes tailwind_source, "--color-fp-primary"
   end
 
+  def test_dummy_tailwind_sources_match_the_installed_flatpack_components
+    css_path = File.expand_path("dummy/app/assets/tailwind/application.css", __dir__)
+    base = File.dirname(css_path)
+    matches = File.read(css_path).scan(/@source "([^"]+)"/).flatten.flat_map do |glob|
+      Dir.glob(File.expand_path(glob, base))
+    end
+
+    assert matches.any? { |path| path.include?("/flatpack-") && path.include?("/app/components/") },
+           "Tailwind @source globs matched no installed FlatPack component files"
+    assert matches.any? { |path| path.end_with?("layouts/recording_studio/default_layout.html.erb") },
+           "Tailwind @source globs missed the Recording Studio default layout"
+  end
+
   def test_recording_studio_keeps_strict_recordable_declarations_enabled
     initializer_path = File.expand_path("dummy/config/initializers/recording_studio.rb", __dir__)
     initializer_source = File.read(initializer_path)
