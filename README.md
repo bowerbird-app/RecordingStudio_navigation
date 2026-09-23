@@ -48,18 +48,13 @@ RecordingStudio::Navigation.register(key: "billing.invoices", label: "Invoices",
 
 ### Route kinds
 
-Routes store identity, never a path string. Nothing is resolved at boot, because a mounted engine's path depends on where the host mounted it.
+Routes store identity, never a path string. Nothing is resolved at boot, because a mounted engine's path depends on where the host mounted it. A symbol is a host helper, resolved through `main_app`. A hash names one mounted engine, its helper, and optional params. A callable builds a path that needs more than one helper, or picks one mount when the same engine is mounted more than once.
 
 ```ruby
-# Host helper. Resolved through main_app.
 route: :admin_publications_brands_path
 
-# Mounted engine helper. The engine is stored by name and the mount is found
-# in the host's route set at request time.
 route: { engine: Publications::Engine, helper: :brands_path, params: { page: 1 } }
 
-# Callable. Use it when a path needs more than one helper call, or when the
-# same engine is mounted more than once.
 route: ->(context) { context.main_app.docs_methods_path(anchor: "example-method") }
 ```
 
@@ -84,18 +79,14 @@ end
 Every query returns a frozen Array in registration order.
 
 ```ruby
-# Everything.
 RecordingStudio::Navigation.destinations
 
-# One tag, one sensitivity, or both.
 RecordingStudio::Navigation.destinations(tag: :admin)
 RecordingStudio::Navigation.destinations(sensitivity: :sensitive)
 RecordingStudio::Navigation.destinations(tag: :admin, sensitivity: :normal)
 
-# One named group.
 RecordingStudio::Navigation.group(:admin_sidebar)
 
-# Case-insensitive substring over key, label, description, and tag names.
 RecordingStudio::Navigation.search("brand")
 RecordingStudio::Navigation.search("brand", tag: :admin)
 ```
@@ -122,7 +113,6 @@ There is no `authorized?`, `access`, `role`, or `permission` in this gem. Record
 The host asks the registry for candidates, drops what the current actor may not reach, and only then renders:
 
 ```ruby
-# app/helpers/navigation_helper.rb
 def admin_sidebar_destinations
   RecordingStudio::Navigation.group(:admin_sidebar).select do |destination|
     next false if destination.sensitivity == :restricted && !current_user.admin?

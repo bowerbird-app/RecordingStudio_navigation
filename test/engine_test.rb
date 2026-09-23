@@ -52,10 +52,10 @@ class EngineTest < Minitest::Test
     assert_equal true, RecordingStudioNavigation.configuration.enable_feature_x
   end
 
-  def test_load_config_handles_errors_and_each_pair_fallback
+  def test_load_config_skips_a_missing_yaml_file_and_merges_x_config
     pair_config = Class.new do
-      def each_pair
-        yield(:timeout, 15)
+      def to_h
+        { timeout: 15 }
       end
     end.new
 
@@ -64,7 +64,7 @@ class EngineTest < Minitest::Test
 
     app = Struct.new(:config) do
       def config_for(_name)
-        raise "missing file"
+        raise "Could not load configuration. No such file - config/recording_studio_navigation.yml"
       end
     end.new(app_config)
 
@@ -73,7 +73,7 @@ class EngineTest < Minitest::Test
     assert_equal 15, RecordingStudioNavigation.configuration.timeout
   end
 
-  def test_load_config_swallow_each_pair_errors
+  def test_load_config_skips_x_config_without_to_h
     bad_pair_config = Class.new do
       def each_pair
         raise "bad pair"
@@ -88,10 +88,10 @@ class EngineTest < Minitest::Test
       end
     end.new(app_config)
 
-    # Should not raise even if xcfg.each_pair fails.
     find_initializer("recording_studio_navigation.load_config").block.call(app)
 
     assert_equal "ok", RecordingStudioNavigation.configuration.api_key
+    assert_equal 5, RecordingStudioNavigation.configuration.timeout
   end
 
   def test_load_config_is_noop_without_config_sources
@@ -104,7 +104,7 @@ class EngineTest < Minitest::Test
     assert_equal false, RecordingStudioNavigation.configuration.enable_feature_x
   end
 
-  def test_load_config_ignores_non_enumerable_yaml_and_merge_errors
+  def test_load_config_raises_when_yaml_cannot_be_read
     yaml = Class.new do
       def each
         raise "bad yaml"
@@ -122,9 +122,12 @@ class EngineTest < Minitest::Test
     end.new(app_config)
     app.yaml = yaml
 
-    find_initializer("recording_studio_navigation.load_config").block.call(app)
+    error = assert_raises(RuntimeError) do
+      find_initializer("recording_studio_navigation.load_config").block.call(app)
+    end
 
-    assert_equal 22, RecordingStudioNavigation.configuration.timeout
+    assert_equal "bad yaml", error.message
+    assert_equal 5, RecordingStudioNavigation.configuration.timeout
   end
 
   def test_apply_extension_initializers_register_active_support_on_load_callbacks

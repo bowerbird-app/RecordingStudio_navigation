@@ -145,6 +145,17 @@ class InstallGeneratorTest < Minitest::Test
     refute_includes install_guide, "RecordingStudio v3"
   end
 
+  def test_copied_migrations_get_distinct_timestamps
+    require "generators/recording_studio_navigation/migrations/migrations_generator"
+
+    generator = RecordingStudioNavigation::Generators::MigrationsGenerator.new([], {}, destination_root: "/tmp")
+    first = generator.send(:next_migration_number)
+    second = generator.send(:next_migration_number)
+
+    refute_equal first, second
+    assert_operator second, :>, first
+  end
+
   private
 
   def assert_tailwind_sources_present(css)

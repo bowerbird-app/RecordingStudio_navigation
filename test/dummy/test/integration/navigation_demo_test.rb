@@ -115,8 +115,6 @@ class NavigationDemoTest < ActionDispatch::IntegrationTest
     destination.route.resolve(resolution_context)
   end
 
-  # Resolution needs a request-time context: main_app and the host's mount
-  # proxies both come from the running application's route set.
   def resolution_context
     controller = ApplicationController.new
     controller.request = ActionDispatch::TestRequest.create

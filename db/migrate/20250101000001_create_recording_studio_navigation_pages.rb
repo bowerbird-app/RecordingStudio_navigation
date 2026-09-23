@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-# Example migration for a Recording Studio addon.
-#
-# This creates a workspace-scoped table owned by the addon. Use it as a starting
-# point for addon-specific data that hangs off the host application's root
-# Workspace recordable.
-#
 class CreateRecordingStudioNavigationPages < ActiveRecord::Migration[8.1]
   def change
     create_table :recording_studio_navigation_pages, id: :uuid do |t|
