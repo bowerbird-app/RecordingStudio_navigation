@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 
-module GemTemplate
+module RecordingStudioNavigation
   class Configuration
     attr_accessor :api_key, :enable_feature_x, :timeout
     attr_reader :hooks
 
     def initialize
-      @api_key = ENV.fetch("GEM_TEMPLATE_API_KEY", nil)
+      @api_key = ENV.fetch("RECORDING_STUDIO_NAVIGATION_API_KEY", nil)
       @enable_feature_x = false
       @timeout = 5
       @hooks = RecordingStudio::Hooks.new

@@ -7,6 +7,22 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.3.0] - 2026-09-23
+
+### Added
+- `RecordingStudio::Navigation`, a process-wide registry of navigable destinations. Gems call `register(key:, label:, route:, ...)`; hosts read `destinations(tag:, sensitivity:)`, `group(name)`, and `search(query, ...)`. Destinations are frozen, keys are globally unique, and a conflicting re-registration raises `DuplicateDestinationError` naming both declaration sites.
+- Request-time route resolution for host helpers (through `main_app`), mounted engine helpers (found in the host's route set, so the mount prefix is always current), and callables. `Route#resolve` is the only method that builds a path.
+- `sensitivity` metadata (`:normal`, `:sensitive`, `:restricted`) that is advisory only. There is no `authorized?`, `access`, `role`, or `permission`; Recording Studio Accessible and the host own access control.
+- Navigation demo on the dummy home page: example destinations registered from the dummy initializer, a destination table with All / Admin / Sensitive filters, and a route column resolved during the request.
+
+### Changed
+- Gem renamed from `gem_template` to `recording_studio_navigation` (engine module `RecordingStudioNavigation`). The public API namespace is `RecordingStudio::Navigation`.
+- README replaced the template guide's "what this gem is" with the navigation registry: registration, querying, groups, sensitivity, and host filtering.
+- Dummy Tailwind sources scan FlatPack and Recording Studio git checkouts under `vendor/bundle`, `/usr/local/lib/ruby/gems`, and the GitHub Actions toolcache, so component classes and the default layout are compiled wherever Bundler installed them.
+
+### Removed
+- Unused `recording_studio_navigation_pages` migration. Destinations live in the in-memory registry, not a table.
+
 ## [0.2.2] - 2026-09-11
 
 ### Changed
@@ -46,7 +62,7 @@ New addons copied from this template are born on Recording Studio 4.x.
 ### Added
 - Gemspec dependency `recording_studio`, `~> 4.1`
 - Dummy host wiring for Accessible (`enable_capability(:accessible, on: Workspace)`) and an opt-in `RecordingStudio::Capabilities::Example.to` mixin. `.to` wraps core 4.2.0 `include_for` (not a fourth verb, and not a raw `enable_capability` / `set_capability_options` path). Installing the gem does not enable the mixin globally; only dummy Workspace opts in.
-- `bin/rename_gem` leftover-identity rewrite/verification for README, homepage, and changelog URLs that still say `GemTemplate` or point at `bowerbird-app/gem_template`
+- `bin/rename_gem` leftover-identity rewrite/verification for README, homepage, and changelog URLs that still say `RecordingStudioNavigation` or point at `bowerbird-app/recording_studio_navigation`
 
 ### Changed
 - Dummy GitHub tags: Recording Studio `v4.2.0`, Accessible `v0.6.0`, Root Switchable `v0.5.0`, FlatPack `v0.1.133`
@@ -55,7 +71,7 @@ New addons copied from this template are born on Recording Studio 4.x.
 - Require `RecordingStudio::Hooks` and `RecordingStudio::Services::BaseService` from core instead of shipping copies
 
 ### Removed
-- Copied `lib/gem_template/hooks.rb` and `lib/gem_template/services/base_service.rb`
+- Copied `lib/recording_studio_navigation/hooks.rb` and `lib/recording_studio_navigation/services/base_service.rb`
 - Product-shipped `ExampleService`
 - Custom `flat_pack_sidebar` authenticated shell
 
@@ -90,10 +106,11 @@ New addons copied from this template are born on Recording Studio 4.x.
 - Comprehensive README and documentation
 - Basic test suite with Minitest
 
-[Unreleased]: https://github.com/bowerbird-app/RecordingStudio_gem_template/compare/v0.2.2...HEAD
-[0.2.2]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.2.2
-[0.2.1]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.2.1
-[0.2.0]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.2.0
-[0.1.2]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.1.2
-[0.1.1]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.1.1
-[0.1.0]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.1.0
+[Unreleased]: https://github.com/bowerbird-app/recording_studio_navigation/compare/v0.3.0...HEAD
+[0.3.0]: https://github.com/bowerbird-app/recording_studio_navigation/compare/v0.2.2...v0.3.0
+[0.2.2]: https://github.com/bowerbird-app/recording_studio_navigation/releases/tag/v0.2.2
+[0.2.1]: https://github.com/bowerbird-app/recording_studio_navigation/releases/tag/v0.2.1
+[0.2.0]: https://github.com/bowerbird-app/recording_studio_navigation/releases/tag/v0.2.0
+[0.1.2]: https://github.com/bowerbird-app/recording_studio_navigation/releases/tag/v0.1.2
+[0.1.1]: https://github.com/bowerbird-app/recording_studio_navigation/releases/tag/v0.1.1
+[0.1.0]: https://github.com/bowerbird-app/recording_studio_navigation/releases/tag/v0.1.0

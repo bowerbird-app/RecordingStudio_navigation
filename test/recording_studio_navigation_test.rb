@@ -2,23 +2,23 @@
 
 require "test_helper"
 
-class GemTemplateTest < Minitest::Test
+class RecordingStudioNavigationTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.2.2", ::GemTemplate::VERSION
+    assert_equal "0.3.0", ::RecordingStudioNavigation::VERSION
   end
 
   def test_engine_exists
-    assert_kind_of Class, ::GemTemplate::Engine
+    assert_kind_of Class, ::RecordingStudioNavigation::Engine
   end
 
   def test_gemspec_pins_recording_studio_4_2
-    gemspec = File.read(File.expand_path("../gem_template.gemspec", __dir__))
+    gemspec = File.read(File.expand_path("../recording_studio_navigation.gemspec", __dir__))
 
     assert_includes gemspec, 'spec.add_dependency "recording_studio", "~> 4.2"'
   end
 
   def test_gemspec_excludes_cursor_config
-    spec = Gem::Specification.load(File.expand_path("../gem_template.gemspec", __dir__))
+    spec = Gem::Specification.load(File.expand_path("../recording_studio_navigation.gemspec", __dir__))
     cursor_files = spec.files.select { |path| path == ".cursor" || path.split("/").include?(".cursor") }
 
     assert_empty cursor_files, "gemspec must not package .cursor/ (got #{cursor_files.inspect})"
@@ -69,13 +69,13 @@ class GemTemplateTest < Minitest::Test
   end
 
   def test_template_does_not_ship_copied_core_hooks_or_base_service
-    refute File.exist?(File.expand_path("../lib/gem_template/hooks.rb", __dir__))
-    refute File.exist?(File.expand_path("../lib/gem_template/services/base_service.rb", __dir__))
-    refute File.exist?(File.expand_path("../lib/gem_template/services/example_service.rb", __dir__))
+    refute File.exist?(File.expand_path("../lib/recording_studio_navigation/hooks.rb", __dir__))
+    refute File.exist?(File.expand_path("../lib/recording_studio_navigation/services/base_service.rb", __dir__))
+    refute File.exist?(File.expand_path("../lib/recording_studio_navigation/services/example_service.rb", __dir__))
   end
 
   def test_example_capability_wraps_include_for_and_is_not_enabled_globally
-    source = File.read(File.expand_path("../lib/gem_template/capabilities/example.rb", __dir__))
+    source = File.read(File.expand_path("../lib/recording_studio_navigation/capabilities/example.rb", __dir__))
 
     assert_includes source, "def self.to(**)"
     assert_includes source, "RecordingStudio::Capabilities.include_for(:example, **)"
@@ -121,6 +121,19 @@ class GemTemplateTest < Minitest::Test
     refute_includes tailwind_source, "--color-fp-primary"
   end
 
+  def test_dummy_tailwind_sources_match_the_installed_flatpack_components
+    css_path = File.expand_path("dummy/app/assets/tailwind/application.css", __dir__)
+    base = File.dirname(css_path)
+    matches = File.read(css_path).scan(/@source "([^"]+)"/).flatten.flat_map do |glob|
+      Dir.glob(File.expand_path(glob, base))
+    end
+
+    assert matches.any? { |path| path.include?("/flatpack-") && path.include?("/app/components/") },
+           "Tailwind @source globs matched no installed FlatPack component files"
+    assert matches.any? { |path| path.end_with?("layouts/recording_studio/default_layout.html.erb") },
+           "Tailwind @source globs missed the Recording Studio default layout"
+  end
+
   def test_recording_studio_keeps_strict_recordable_declarations_enabled
     initializer_path = File.expand_path("dummy/config/initializers/recording_studio.rb", __dir__)
     initializer_source = File.read(initializer_path)
@@ -142,13 +155,18 @@ class GemTemplateTest < Minitest::Test
     refute_includes readme_source, "flat_pack_sidebar"
   end
 
-  def test_product_readme_is_the_template_guide
+  def test_product_readme_documents_the_navigation_registry
     readme = File.read(File.expand_path("../README.md", __dir__))
 
     assert_includes readme, "RecordingStudio"
     assert_includes readme, "v4.2.0"
     assert_includes readme, "v0.1.177"
     assert_includes readme, "v0.9.1"
+    assert_includes readme, "RecordingStudio::Navigation.register("
+    assert_includes readme, "RecordingStudio::Navigation.destinations(tag: :admin)"
+    assert_includes readme, "RecordingStudio::Navigation.group(:admin_sidebar)"
+    assert_includes readme, "Sensitivity is advisory, not authorization"
+    assert_includes readme, "Recording Studio Accessible and the host app own access control"
     refute_includes readme, "v0.1.133"
     refute_includes readme, "v3 declarations"
     refute_includes readme, "RecordingStudio v3"
@@ -160,8 +178,9 @@ class GemTemplateTest < Minitest::Test
     view_path = File.expand_path("dummy/app/views/home/index.html.erb", __dir__)
     view_source = File.read(view_path)
 
-    assert_includes view_source, 'title: "Template Demo"'
-    assert_includes view_source, 'subtitle: "This dummy app is the browser-facing demo surface for the template."'
+    assert_includes view_source, 'title: "Navigation Demo"'
+    assert_includes view_source, 'subtitle: "Destinations registered with RecordingStudio::Navigation, ' \
+                                 'queried the way a host app queries them."'
     assert_includes view_source, "FlatPack::Card::Component"
     assert_includes view_source, "dummy_page_nav"
     refute_includes view_source, 'title: "Demo"'
@@ -213,7 +232,7 @@ class GemTemplateTest < Minitest::Test
   end
 
   def test_engine_does_not_ship_a_home_view
-    view_path = File.expand_path("../app/views/gem_template/home/index.html.erb", __dir__)
+    view_path = File.expand_path("../app/views/recording_studio_navigation/home/index.html.erb", __dir__)
 
     refute File.exist?(view_path)
   end
