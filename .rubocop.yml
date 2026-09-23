@@ -16,6 +16,11 @@ Style/StringLiterals:
 Layout/LineLength:
   Max: 120
 
+# Keyword arguments are the public registration API; counting them as
+# positional parameters would only push the same names into an options hash.
+Metrics/ParameterLists:
+  CountKeywordArgs: false
+
 # Relax metrics for test files and generators
 Metrics/ClassLength:
   Exclude:

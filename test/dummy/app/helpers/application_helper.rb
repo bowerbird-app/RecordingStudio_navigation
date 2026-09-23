@@ -1,4 +1,12 @@
 module ApplicationHelper
+  # The view context is the resolution context: it carries main_app and the
+  # host's mount proxies.
+  def navigation_route(destination)
+    destination.route.resolve(self)
+  rescue RecordingStudio::Navigation::RouteResolutionError => error
+    error.message
+  end
+
   def dummy_page_nav(title:, back_url: nil, back_label: "Home")
     recording_studio_page_nav(
       title: title,
