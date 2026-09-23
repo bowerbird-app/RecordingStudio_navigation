@@ -20,8 +20,10 @@ module RecordingStudio
           key: key, label: label, route: Route.coerce(route), description: description,
           icon: icon, tags: tags, groups: groups, sensitivity: sensitivity
         )
+        location = caller_locations(1, 1)&.first
+        source = "#{location.path}:#{location.lineno}" if location
 
-        registry.add(destination, source: registration_source)
+        registry.add(destination, source: source)
       end
 
       # Registered destinations in registration order, optionally narrowed by
@@ -43,8 +45,6 @@ module RecordingStudio
 
       private
 
-      # Allocated once per process and never reset by the Rails reloader, so
-      # destinations declared from lib/ survive code reloading.
       def registry
         @registry ||= Registry.new
       end
@@ -54,15 +54,6 @@ module RecordingStudio
           name.is_a?(Symbol) || name.is_a?(String)
 
         name.to_sym
-      end
-
-      # Named in DuplicateDestinationError so a conflict points at both
-      # declaration sites instead of at this file.
-      def registration_source
-        location = caller_locations(2, 1)&.first
-        return nil unless location
-
-        "#{location.path}:#{location.lineno}"
       end
     end
   end

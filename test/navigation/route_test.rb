@@ -7,11 +7,8 @@ require "navigation/registry_isolation"
 class NavigationRouteTest < Minitest::Test
   include NavigationRegistryIsolation
 
-  # A named engine class so the mount scan has a real class name to compare.
   class PublicationsEngine < ::Rails::Engine; end
 
-  # Mirrors the two layers a mounted engine sits behind in a Rails route set:
-  # the journey route's constraints wrapper, then the engine endpoint.
   Endpoint = Struct.new(:app)
   FakeRoute = Struct.new(:name, :app)
 
@@ -197,11 +194,10 @@ class NavigationRouteTest < Minitest::Test
   end
 
   def test_two_callables_with_the_same_body_are_different_definitions
-    body = "->(context) { context.main_app.admin_publications_brands_path }"
-    register(route: eval(body)) # rubocop:disable Security/Eval
+    register(route: ->(context) { context.main_app.admin_publications_brands_path })
 
     assert_raises(RecordingStudio::Navigation::DuplicateDestinationError) do
-      register(route: eval(body)) # rubocop:disable Security/Eval
+      register(route: ->(context) { context.main_app.admin_publications_brands_path })
     end
   end
 

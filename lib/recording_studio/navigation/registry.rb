@@ -2,8 +2,6 @@
 
 module RecordingStudio
   module Navigation
-    # Validated query data. Hosts pass keyword arguments; keeping this value
-    # internal keeps index choices out of the public API.
     class DestinationFilter
       attr_reader :tag, :sensitivity
 
@@ -28,15 +26,10 @@ module RecordingStudio
       end
     end
 
-    # One process-wide owner of canonical Destination objects. Reads take the
-    # current frozen snapshot; a write publishes a new snapshot in one
-    # assignment, so a reader never sees a half-built index.
     class Registry
       EMPTY_LIST = [].freeze
       private_constant :EMPTY_LIST
 
-      # One immutable point-in-time state. Every bucket keeps registration
-      # order and points at the objects in `ordered`.
       class Snapshot
         attr_reader :ordered, :by_key, :by_tag, :by_sensitivity, :by_group, :search_document_by_key, :source_by_key
 

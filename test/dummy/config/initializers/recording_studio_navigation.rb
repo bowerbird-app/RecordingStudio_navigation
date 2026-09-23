@@ -1,11 +1,5 @@
 # frozen_string_literal: true
 
-RecordingStudioNavigation.configure do |config|
-  # config.api_key = "..."
-end
-
-# Example destinations for the browser demo on the dummy home page. A real host
-# never registers these; each gem registers its own.
 RecordingStudio::Navigation.register(
   key: "dummy.home",
   label: "Dummy home",

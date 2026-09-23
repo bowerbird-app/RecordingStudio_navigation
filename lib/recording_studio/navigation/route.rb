@@ -13,8 +13,6 @@ module RecordingStudio
       # resolve because mounts can change with the route set, and because `as:`
       # lets a host name a mount something other than the engine name.
       class MountScan
-        # A mount endpoint sits behind a couple of Rack wrappers; the bound
-        # stops a malformed endpoint chain from looping forever.
         UNWRAP_LIMIT = 10
         private_constant :UNWRAP_LIMIT
 
