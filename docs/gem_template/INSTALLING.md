@@ -201,9 +201,11 @@ This template's dummy app uses RecordingStudio `v4.4.0` (`~> 4.2` in the gemspec
 `recording_studio_recordable(...)`, and create roots with `RecordingStudio.root_recording_for(recordable)`.
 Child recordings must be created with an explicit `parent_recording`.
 
-When Accessible is bundled, pin the dummy or host Gemfile to `v0.9.1`, run
+When Accessible is bundled, pin the dummy or host Gemfile to `v0.13.0`, run
 `bin/rails generate recording_studio_accessible:migrations`, migrate, and rebuild Tailwind after
-bumping FlatPack (`v0.1.177`).
+bumping FlatPack (`v0.1.177`). Accessible `0.10.0` adds access invitations and `0.11.0`
+converts `recording_studio_accesses.role` from integer to string; later i18n releases need no
+schema change.
 
 ---
 
