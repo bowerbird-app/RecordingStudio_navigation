@@ -160,6 +160,7 @@ class EngineTest < Minitest::Test
       end
     end
     applied = []
+    require "active_record" unless defined?(ActiveRecord::Base)
 
     GemTemplate::Engine.stub(:config, config_stub) do
       find_initializer("gem_template.apply_model_extensions").block.call
@@ -184,6 +185,7 @@ class EngineTest < Minitest::Test
     first_controller = Class.new
     second_controller = Class.new
     applied = []
+    require "action_controller" unless defined?(ActionController::Base)
 
     GemTemplate::Engine.stub(:config, config_stub) do
       find_initializer("gem_template.apply_controller_extensions").block.call
