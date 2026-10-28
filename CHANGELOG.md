@@ -26,7 +26,6 @@ Unreleased. No tag.
 - README, changelog, and gemspec links now point at `github.com/bowerbird-app/RecordingStudio_navigation`.
 
 ### Fixed
-- Engine tests cover extension flattening and initializer descendant walks through public `apply_*_extensions` and stubs, not `send` into private methods or `const_set` fakes.
 - Root lock `crass` 1.0.6 → 1.0.8; dummy lock `crass` 1.0.7 → 1.0.8 and `net-ssh` 7.3.0 → 7.3.8.
 
 ## [0.2.2] - 2026-09-11
