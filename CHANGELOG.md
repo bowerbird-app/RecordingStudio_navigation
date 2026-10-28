@@ -7,8 +7,26 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 
 ## [Unreleased]
 
+## [0.2.3]
+
+Unreleased. No tag.
+
+### Removed
+- Tracked SimpleCov output under `coverage/` and `test/dummy/coverage/`. Those directories are gitignored.
+- Leftover template docs in `docs/gem_template/`.
+- Unused Stimulus `hello_controller.js` in the dummy app.
+- Nested dummy-app GitHub workflow at `test/dummy/.github/workflows/ci.yml`.
+- Example `gem_template_pages` migration. Nothing in this gem, its dummy, or `featured_in` used that table.
+- Engine `HomeController` (`head :ok`) and the engine root route that pointed at it. Dummy home stays on the host `HomeController`.
+- Stale `UPDATE_SUMMARY.md` and `MIGRATION_NOTES.md` pin recaps.
+
 ### Changed
-- Dummy/host Gemfile GitHub pin for Recording Studio `v4.2.0` → `v4.2.2` (revision `036686a`; gem version at that tag is `4.2.1`). Gemspec stays `~> 4.2`.
+- Version `0.2.2` → `0.2.3`.
+- README tech stack now matches the files: gemspec `recording_studio ~> 4.2`, root GitHub tag `v4.6.0`, dummy GitHub tag `v4.7.0`, Root Switchable dummy tag `v0.9.0`. Pins themselves are unchanged.
+- README, changelog, and gemspec links now point at `github.com/bowerbird-app/RecordingStudio_navigation`.
+
+### Fixed
+- Engine tests cover extension flattening and initializer descendant walks through public `apply_*_extensions` and stubs, not `send` into private methods or `const_set` fakes.
 
 ## [0.2.2] - 2026-09-11
 
@@ -93,10 +111,11 @@ New addons copied from this template are born on Recording Studio 4.x.
 - Comprehensive README and documentation
 - Basic test suite with Minitest
 
-[Unreleased]: https://github.com/bowerbird-app/RecordingStudio_gem_template/compare/v0.2.2...HEAD
-[0.2.2]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.2.2
-[0.2.1]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.2.1
-[0.2.0]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.2.0
-[0.1.2]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.1.2
-[0.1.1]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.1.1
-[0.1.0]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.1.0
+[Unreleased]: https://github.com/bowerbird-app/RecordingStudio_navigation/compare/v0.2.3...HEAD
+[0.2.3]: https://github.com/bowerbird-app/RecordingStudio_navigation/compare/v0.2.2...HEAD
+[0.2.2]: https://github.com/bowerbird-app/RecordingStudio_navigation/releases/tag/v0.2.2
+[0.2.1]: https://github.com/bowerbird-app/RecordingStudio_navigation/releases/tag/v0.2.1
+[0.2.0]: https://github.com/bowerbird-app/RecordingStudio_navigation/releases/tag/v0.2.0
+[0.1.2]: https://github.com/bowerbird-app/RecordingStudio_navigation/releases/tag/v0.1.2
+[0.1.1]: https://github.com/bowerbird-app/RecordingStudio_navigation/releases/tag/v0.1.1
+[0.1.0]: https://github.com/bowerbird-app/RecordingStudio_navigation/releases/tag/v0.1.0
