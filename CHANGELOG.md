@@ -20,6 +20,7 @@ Unreleased. No tag.
 ### Changed
 - Version `0.2.2` → `0.2.3`.
 - CI and Security `setup-ruby` `ruby-version` is `"3.3"` instead of `.ruby-version`.
+- FlatPack bumped to `v0.1.311` to fix Bundler Audit (view_component >= 4.14).
 
 ### Fixed
 - Root lock `crass` 1.0.6 → 1.0.8; dummy lock `crass` 1.0.7 → 1.0.8 and `net-ssh` 7.3.0 → 7.3.8.
