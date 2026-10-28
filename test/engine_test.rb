@@ -160,15 +160,13 @@ class EngineTest < Minitest::Test
       end
     end
     applied = []
-    active_record_base = Class.new
-    active_record_base.define_singleton_method(:descendants) { [abstract_model, concrete_model] }
 
     GemTemplate::Engine.stub(:config, config_stub) do
       find_initializer("gem_template.apply_model_extensions").block.call
     end
 
-    with_temporary_nested_constant(:ActiveRecord, :Base, active_record_base) do
-      GemTemplate::Engine.stub(:apply_model_extensions, ->(model) { applied << model }) do
+    GemTemplate::Engine.stub(:apply_model_extensions, ->(model) { applied << model }) do
+      ActiveRecord::Base.stub(:descendants, [abstract_model, concrete_model]) do
         to_prepare_blocks.first.call
       end
     end
@@ -186,15 +184,13 @@ class EngineTest < Minitest::Test
     first_controller = Class.new
     second_controller = Class.new
     applied = []
-    action_controller_base = Class.new
-    action_controller_base.define_singleton_method(:descendants) { [first_controller, second_controller] }
 
     GemTemplate::Engine.stub(:config, config_stub) do
       find_initializer("gem_template.apply_controller_extensions").block.call
     end
 
-    with_temporary_nested_constant(:ActionController, :Base, action_controller_base) do
-      GemTemplate::Engine.stub(:apply_controller_extensions, ->(controller) { applied << controller }) do
+    GemTemplate::Engine.stub(:apply_controller_extensions, ->(controller) { applied << controller }) do
+      ActionController::Base.stub(:descendants, [first_controller, second_controller]) do
         to_prepare_blocks.first.call
       end
     end
@@ -241,62 +237,53 @@ class EngineTest < Minitest::Test
     assert_equal :applied, instance.template_controller_extension
   end
 
-  def test_apply_extensions_flattens_compacts_and_tracks_identity
-    target = Class.new
+  def test_apply_model_extensions_flattens_compacts_and_tracks_identity
+    target = Class.new do
+      def self.name
+        "ExampleRecord"
+      end
+    end
     extension = proc do
       def generated_method
         :generated
       end
     end
 
-    GemTemplate::Engine.send(:apply_extensions, target, [nil, [extension, extension]])
+    GemTemplate::Engine.stub(:extensions_for, ->(_kind, _names) { [nil, [extension, extension]] }) do
+      GemTemplate::Engine.apply_model_extensions(target)
+    end
 
     assert_equal :generated, target.new.generated_method
     assert_equal true, target.instance_variable_get(:@gem_template_applied_extensions).compare_by_identity?
   end
 
-  def test_apply_extensions_returns_without_target
-    assert_nil GemTemplate::Engine.send(:apply_extensions, nil, [])
-  end
-
-  def test_extension_keys_for_includes_demodulized_name
-    namespaced = Class.new do
-      def self.name
-        "Admin::ReportsController"
+  def test_apply_model_extensions_returns_without_target
+    GemTemplate::Engine.stub(:extension_keys_for, ->(_target) { [] }) do
+      GemTemplate::Engine.stub(:extensions_for, ->(_kind, _names) { [] }) do
+        assert_nil GemTemplate::Engine.apply_model_extensions(nil)
       end
     end
-
-    expected_keys = [:"Admin::ReportsController"]
-    expected_keys << :ReportsController
-
-    assert_equal expected_keys, GemTemplate::Engine.send(:extension_keys_for, namespaced)
   end
 
-  def test_extension_keys_for_removes_duplicate_names
-    plain = Class.new do
+  def test_apply_controller_extensions_uses_plain_controller_name
+    controller_class = Class.new do
       def self.name
         "ReportsController"
       end
     end
 
-    assert_equal [:ReportsController], GemTemplate::Engine.send(:extension_keys_for, plain)
+    GemTemplate.configuration.hooks.extend_controller(:ReportsController) do
+      def template_plain_controller_extension
+        :plain
+      end
+    end
+
+    GemTemplate::Engine.apply_controller_extensions(controller_class)
+
+    assert_equal :plain, controller_class.new.template_plain_controller_extension
   end
 
   private
-
-  def with_temporary_nested_constant(parent_name, child_name, value)
-    parent_defined = Object.const_defined?(parent_name, false)
-    parent = parent_defined ? Object.const_get(parent_name) : Object.const_set(parent_name, Module.new)
-    child_defined = parent.const_defined?(child_name, false)
-    previous_child = parent.const_get(child_name) if child_defined
-
-    parent.const_set(child_name, value)
-    yield
-  ensure
-    parent.send(:remove_const, child_name) if parent.const_defined?(child_name, false)
-    parent.const_set(child_name, previous_child) if child_defined
-    Object.send(:remove_const, parent_name) unless parent_defined
-  end
 
   def find_initializer(name)
     GemTemplate::Engine.initializers.find { |initializer| initializer.name == name }
