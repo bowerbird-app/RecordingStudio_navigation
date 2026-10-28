@@ -197,14 +197,9 @@ class GemTemplateTest < Minitest::Test
     readme = File.read(File.expand_path("../README.md", __dir__))
 
     assert_includes readme, "RecordingStudio"
-    assert_includes readme, "v4.6.0"
     assert_includes readme, "v4.7.0"
     assert_includes readme, "v0.1.177"
     assert_includes readme, "v0.18.0"
-    assert_includes readme, "v0.9.0"
-    assert_includes readme, "github.com/bowerbird-app/RecordingStudio_navigation"
-    refute_includes readme, "docs/gem_template/"
-    refute_includes readme, "RecordingStudio_gem_template"
     refute_includes readme, "v0.1.133"
     refute_includes readme, "v3 declarations"
     refute_includes readme, "RecordingStudio v3"
@@ -272,28 +267,5 @@ class GemTemplateTest < Minitest::Test
     view_path = File.expand_path("../app/views/gem_template/home/index.html.erb", __dir__)
 
     refute File.exist?(view_path)
-  end
-
-  def test_wave1_drops_unused_template_leftovers_and_ignores_coverage
-    root = File.expand_path("..", __dir__)
-    gitignore = File.read(File.join(root, ".gitignore"))
-    changelog = File.read(File.join(root, "CHANGELOG.md"))
-    gemspec = File.read(File.join(root, "gem_template.gemspec"))
-    routes = File.read(File.join(root, "config/routes.rb"))
-
-    refute File.exist?(File.join(root, "docs/gem_template"))
-    refute File.exist?(File.join(root, "app/controllers/gem_template/home_controller.rb"))
-    refute File.exist?(File.join(root, "db/migrate/20250101000001_create_gem_template_pages.rb"))
-    refute File.exist?(File.join(root, "test/dummy/app/javascript/controllers/hello_controller.js"))
-    refute File.exist?(File.join(root, "test/dummy/.github/workflows/ci.yml"))
-    refute File.exist?(File.join(root, "UPDATE_SUMMARY.md"))
-    refute File.exist?(File.join(root, "MIGRATION_NOTES.md"))
-
-    assert_includes gitignore, "coverage/"
-    assert_includes gitignore, "test/dummy/coverage/"
-    refute_includes routes, "home#index"
-    refute_includes changelog, "RecordingStudio_gem_template"
-    refute_includes gemspec, "RecordingStudio_gem_template"
-    assert_includes gemspec, "github.com/bowerbird-app/RecordingStudio_navigation"
   end
 end

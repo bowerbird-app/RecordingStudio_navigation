@@ -159,7 +159,7 @@ See the [FlatPack README](https://github.com/bowerbird-app/flatpack) for full do
 | Rails           | 8.1+    |
 | PostgreSQL      | 16      |
 | TailwindCSS     | 4       |
-| RecordingStudio | 4.x (`~> 4.2` in the gemspec; root GitHub tag `v4.6.0`; dummy GitHub tag `v4.7.0`) |
+| RecordingStudio | 4.x (`~> 4.2` in the gemspec; dummy GitHub tag `v4.7.0`) |
 | Accessible      | dummy GitHub tag `v0.18.0` |
 | Trashable       | dummy GitHub tag `v0.11.0` (required by accessible ≥ 0.17; query-only) |
 | Root Switchable | dummy GitHub tag `v0.9.0` |
@@ -168,8 +168,8 @@ See the [FlatPack README](https://github.com/bowerbird-app/flatpack) for full do
 | FlatPack        | dummy GitHub tag `v0.1.177` |
 | Devise          | latest  |
 
-The dummy Gemfile keeps `github:` sources so Bundler can fetch those gems. The gemspec still pins `recording_studio` to `~> 4.2` so copied addons declare the core dependency even when GitHub is the fetch source. The root `Gemfile` pins Recording Studio at `v4.6.0`; the dummy host pins `v4.7.0`.
+The dummy Gemfile keeps `github:` sources so Bundler can fetch those gems. The gemspec still pins `recording_studio` to `~> 4.2` so copied addons declare the core dependency even when GitHub is the fetch source.
 
 ## Documentation
 
-This README and the dummy app are the source of truth for the Recording Studio addon workflow. The gem lives at [bowerbird-app/RecordingStudio_navigation](https://github.com/bowerbird-app/RecordingStudio_navigation).
+The original gem template documentation is preserved in `docs/gem_template/` as architectural reference material. Use it as background on the engine conventions; this README and the dummy app are the source of truth for the Recording Studio addon workflow.
