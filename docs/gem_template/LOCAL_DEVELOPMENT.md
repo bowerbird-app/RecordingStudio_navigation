@@ -16,7 +16,7 @@ This guide covers setting up the gem for local development outside of GitHub Cod
 
 | Dependency | Version | Notes |
 |------------|---------|-------|
-| Ruby | 3.3+ | Check with `ruby -v` |
+| Ruby | 3.3.13+ | Check with `ruby -v` |
 | PostgreSQL | 16+ | UUID support required |
 | Redis | 7+ | For Action Cable / caching |
 | Node.js | 18+ | For TailwindCSS CLI (optional if using standalone) |
@@ -191,7 +191,7 @@ bin/rails db:migrate
 | Tailwind styles missing | Run `bin/rails tailwindcss:build`. |
 | Port 3000 in use | Use `PORT=3001 bin/dev`. |
 | Redis connection refused | Start Redis: `redis-server` or `brew services start redis`. |
-| Bundle install fails | Check Ruby version matches `.ruby-version` (3.3.0). |
+| Bundle install fails | Check Ruby version matches `.ruby-version` (3.3.13). |
 | Couldn't decrypt credentials | Set `RAILS_MASTER_KEY` to the shared Recording Studio dummy key, or write it to `test/dummy/config/master.key`. Do not generate a new key. |
 
 ---

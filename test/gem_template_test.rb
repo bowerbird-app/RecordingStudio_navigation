@@ -4,7 +4,21 @@ require "test_helper"
 
 class GemTemplateTest < Minitest::Test
   def test_version_matches_release
-    assert_equal "0.2.3", ::GemTemplate::VERSION
+    assert_equal "0.2.4", ::GemTemplate::VERSION
+    assert_equal "3.3.13", File.read(File.expand_path("../.ruby-version", __dir__)).strip
+    assert_equal "3.3.13", File.read(File.expand_path("dummy/.ruby-version", __dir__)).strip
+  end
+
+  def test_lockfiles_pin_rails_and_html_security_floors
+    [File.expand_path("../Gemfile.lock", __dir__), File.expand_path("dummy/Gemfile.lock", __dir__)].each do |lock|
+      text = File.read(lock)
+
+      assert_match(/^    rails \(8\.1\.4\.1\)$/, text, lock)
+      assert_match(/^    rack \(3\.2\.8\)$/, text, lock)
+      assert_match(/^    nokogiri \(1\.19\.7-/, text, lock)
+      assert_match(/^    loofah \(2\.25\.3\)$/, text, lock)
+      assert_match(/^    rails-html-sanitizer \(1\.7\.2\)$/, text, lock)
+    end
   end
 
   def test_engine_exists

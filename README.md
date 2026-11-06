@@ -155,7 +155,7 @@ See the [FlatPack README](https://github.com/bowerbird-app/flatpack) for full do
 
 | Component       | Version |
 |-----------------|---------|
-| Ruby            | 3.3+    |
+| Ruby            | 3.3.13+ |
 | Rails           | 8.1+    |
 | PostgreSQL      | 16      |
 | TailwindCSS     | 4       |

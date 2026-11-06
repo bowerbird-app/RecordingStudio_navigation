@@ -2,7 +2,7 @@
 
 ## Current Requirements
 
-- Ruby 3.3 or newer
+- Ruby 3.3.13 or newer
 - Rails 8.1 or newer
 - Recording Studio 4.x (`~> 4.2` in the gemspec; dummy GitHub tag `v4.7.0`)
 - Accessible dummy tag `v0.18.0`, Trashable dummy tag `v0.11.0` (query-only), and Root Switchable dummy tag `v0.6.0`
