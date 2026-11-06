@@ -10,6 +10,15 @@ and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0
 ### Changed
 - Dummy/host Gemfile GitHub pin for Recording Studio `v4.2.0` → `v4.2.2` (revision `036686a`; gem version at that tag is `4.2.1`). Gemspec stays `~> 4.2`.
 
+## [0.2.4]
+
+Unreleased. No tag.
+
+### Changed
+- Version `0.2.3` → `0.2.4`.
+- `.ruby-version` (root and dummy) `3.3.6` → `3.3.13`.
+- Root and dummy lockfiles: Rails `8.1.3.1` → `8.1.4.1`, rack `>= 3.2.8`, nokogiri `>= 1.19.5`, loofah `>= 2.25.3`, rails-html-sanitizer `>= 1.7.2`.
+
 ## [0.2.3]
 
 Unreleased. No tag.
@@ -108,7 +117,8 @@ New addons copied from this template are born on Recording Studio 4.x.
 - Comprehensive README and documentation
 - Basic test suite with Minitest
 
-[Unreleased]: https://github.com/bowerbird-app/RecordingStudio_gem_template/compare/v0.2.3...HEAD
+[Unreleased]: https://github.com/bowerbird-app/RecordingStudio_gem_template/compare/v0.2.4...HEAD
+[0.2.4]: https://github.com/bowerbird-app/RecordingStudio_gem_template/compare/v0.2.3...HEAD
 [0.2.3]: https://github.com/bowerbird-app/RecordingStudio_gem_template/compare/v0.2.2...HEAD
 [0.2.2]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.2.2
 [0.2.1]: https://github.com/bowerbird-app/RecordingStudio_gem_template/releases/tag/v0.2.1
